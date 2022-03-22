@@ -4,6 +4,7 @@ import br.ucsal.enzo.domain.Person;
 import br.ucsal.enzo.repository.PersonRepository;
 import dto.PersonPostRequestBody;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 
 public class PersonService implements PersonRepository{
-    private final PersonRepository personRepository;
+    @Autowired  private final PersonRepository personRepository;
 
     public List<Person> listALl(){
         return personRepository.findAll();
@@ -31,6 +32,9 @@ public class PersonService implements PersonRepository{
                 .findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person not found"));
     }
 
+    public Person save (PersonPostRequestBody personPostRequestBody){
+        return  personRepository.save(Person.builder().name(personPostRequestBody.getName()).build());
+    }
 
     @Override
     public List<Person> findAll() {
